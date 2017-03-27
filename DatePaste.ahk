@@ -1,4 +1,4 @@
-;;--- Head --- Informations --- AHK --- File(s) needed ---
+;;--- Head --- Informations --- AHK ---
 
 ;;	Compatibility: Windows
 ;;	All files must be in same folder. Where you want.
@@ -12,21 +12,20 @@
 
 ;;--- Softwares Var ---
 
-	SetEnv, title, DatePaste
+	SetEnv, title, Date Paste
 	SetEnv, mode, Press F6 to write actual date and time.
-	SetEnv, version, Version 2017-03-21
+	SetEnv, version, Version 2017-03-27
 	SetEnv, Author, LostByteSoft
 
-;;--- Softwares files ---
+;;--- Softwares files needed ---
 
-	;; FileInstall, .ico, .ico, 0
+	FileInstall, ico_datepaste_w.ico, ico_datepaste_w.ico, 0
 	FileInstall, ico_about.ico, ico_about.ico, 0
 	FileInstall, ico_lock.ico, ico_lock.ico, 0
 	FileInstall, ico_shut.ico, ico_shut.ico, 0
 	FileInstall, ico_HotKeys.ico, ico_HotKeys.ico, 0
 	FileInstall, ico_options.ico, ico_options.ico, 0
 	FileInstall, ico_datepaste_b.ico, ico_datepaste_b.ico, 0
-	FileInstall, ico_datepaste_w.ico, ico_datepaste_w.ico, 0
 	FileInstall, ico_clipboard.ico, ico_clipboard.ico, 0
 
 ;;--- Menu Tray options ---
@@ -35,28 +34,32 @@
 	Menu, tray, add, --= %title% =--, about3
 	Menu, Tray, Icon, --= %title% =--, ico_datepaste_b.ico
 	Menu, tray, add
+	Menu, tray, add, Exit %title%, GuiClose2
+	Menu, Tray, Icon, Exit %title%, ico_shut.ico, 1
+	Menu, tray, add
 	Menu, tray, add, About LostByteSoft, about1 			; Creates a new menu item.
 	Menu, Tray, Icon, About LostByteSoft, ico_about.ico, 1
 	Menu, tray, add, %Version%, Version 				; Show version
 	Menu, Tray, Icon, %Version%, ico_about.ico, 1
-	Menu, tray, add
-	Menu, tray, add, Hotkey: F6 (Default), date2
-	Menu, Tray, Icon, Hotkey: F6 (Default), ico_HotKeys.ico, 1
+	Menu, tray, add, Secret MsgBox, msgbox
+	Menu, Tray, Icon, Secret MsgBox, ico_lock.ico
 	Menu, tray, add
 	Menu, tray, add, --= Options =--, about2
 	Menu, Tray, Icon, --= Options =--, ico_options.ico
 	Menu, tray, add, Set default value., msgbox2
 	Menu, Tray, Icon, Set default value., ico_options.ico
-	Menu, tray, add, Secret MsgBox, msgbox
-	Menu, Tray, Icon, Secret MsgBox, ico_lock.ico
+	Menu, tray, add, Set Choice value., setchoice
+	Menu, Tray, Icon, Set Choice value., ico_options.ico
 	Menu, tray, add
-	Menu, tray, add, Exit %title%, GuiClose2
-	Menu, Tray, Icon, Exit %title%, ico_shut.ico, 1
+	Menu, tray, add, Hotkey: F6 (Default), date2
+	Menu, Tray, Icon, Hotkey: F6 (Default), ico_HotKeys.ico, 1
 	Menu, tray, add
 	Menu, tray, add, Send 'Date && Time' to clip, timedate2
 	Menu, Tray, Icon, Send 'Date && Time' to clip, ico_clipboard.ico, 1
 	Menu, tray, add, Send 'Date' to clip, date
 	Menu, Tray, Icon, Send 'Date' to clip, ico_clipboard.ico, 1
+	Menu, tray, add, Send 'Choice' to clip, choice
+	Menu, Tray, Icon, Send 'Choice' to clip, ico_clipboard.ico, 1
 	Menu, tray, add
 	Menu, Tray, Tip, %title%
 
@@ -73,7 +76,7 @@ start:
 
 timedate:
 	t_TimeFormat := "yyyy-MM-dd-HH-mm-ss"
-	FormatTime t_NowTime, , %t_TimeFormat%  		; Empty time = A_Now
+	FormatTime t_NowTime, , %t_TimeFormat%  			; Empty time = A_Now
 	clipboard = %t_NowTime%
 	;TrayTip, %title%, Sending to 'clipboard' %t_NowTime%, 2, 1
 	Send, %t_NowTime%
@@ -81,7 +84,7 @@ timedate:
 
 date:
 	t_TimeFormat := "yyyy-MM-dd"
-	FormatTime t_NowTime, , %t_TimeFormat%  		; Empty time = A_Now
+	FormatTime t_NowTime, , %t_TimeFormat%  			; Empty time = A_Now
 	clipboard = %t_NowTime%
 	;TrayTip, %title%, Sending to 'clipboard' %t_NowTime%, 2, 1
 	Send, %t_NowTime%
@@ -89,7 +92,7 @@ date:
 
 timedate2:
 	t_TimeFormat := "yyyy-MM-dd-HH-mm-ss"
-	FormatTime t_NowTime, , %t_TimeFormat%  		; Empty time = A_Now
+	FormatTime t_NowTime, , %t_TimeFormat%  			; Empty time = A_Now
 	clipboard = %t_NowTime%
 	TrayTip, %title%, Sending to 'clipboard' %t_NowTime%, 2, 1
 	;Send, %t_NowTime%
@@ -97,7 +100,7 @@ timedate2:
 
 date2:
 	t_TimeFormat := "yyyy-MM-dd"
-	FormatTime t_NowTime, , %t_TimeFormat%  		; Empty time = A_Now
+	FormatTime t_NowTime, , %t_TimeFormat%  			; Empty time = A_Now
 	clipboard = %t_NowTime%
 	TrayTip, %title%, Sending to 'clipboard' %t_NowTime%, 2, 1
 	;Send, %t_NowTime%
@@ -105,20 +108,20 @@ date2:
 
 msgbox:
 	t_TimeFormat1 := "yyyy-MM-dd-HH-mm-ss"
-	FormatTime t_NowTime1, , %t_TimeFormat1%  		; Empty time = A_Now
+	FormatTime t_NowTime1, , %t_TimeFormat1%  			; Empty time = A_Now
 	t_TimeFormat2 := "yyyy-MM-dd"
-	FormatTime t_NowTime2, , %t_TimeFormat2%  		; Empty time = A_Now
+	FormatTime t_NowTime2, , %t_TimeFormat2%  			; Empty time = A_Now
 	msgbox, 0, %title% %mode%, Press F6 to paste actual date and time.: " %t_NowTime1% ".`n`nPress F6 to paste actual date.: " %t_NowTime2% ".
 	goto, start
 
 msgbox2:
 	t_TimeFormat1 := "yyyy-MM-dd-HH-mm-ss"
-	FormatTime t_NowTime1, , %t_TimeFormat1%  		; Empty time = A_Now
+	FormatTime t_NowTime1, , %t_TimeFormat1%			; Empty time = A_Now
 	t_TimeFormat2 := "yyyy-MM-dd"
-	FormatTime t_NowTime2, , %t_TimeFormat2%  		; Empty time = A_Now
+	FormatTime t_NowTime2, , %t_TimeFormat2%			; Empty time = A_Now
 	Ifequal, setvar, 1, setenv, setvar1, Date and Time : %t_NowTime1%
 	Ifequal, setvar, 2, setenv, setvar1, Date : %t_NowTime2%
-	Gui, Add, Text, x5 y5 w400 h98 , Press 'Set_Date_and_Time' to paste actual date and time.: " %t_NowTime1% ".`nPress 'Set_Date' to paste actual time.: " %t_NowTime2% ".`n`nNow the value is %setvar1%`n`n`tAt start default is Date.
+	Gui, Add, Text, x5 y5 w400 h98 , Press 'Set_Date_and_Time' to paste actual date and time.: " %t_NowTime1% ".`n`nPress 'Set_Date' to paste actual time.: " %t_NowTime2% ".`n`nNow the value is %setvar1%`n`n`tAt start default is Date.
 	Gui, Add, Button, x60 y130 w110 h50 , Set_Date_and_Time
 	Gui, Add, Button, x250 y130 w110 h50 , Set_Date
 	Gui, Show, x1095 y420 h200 w425, %title% %mode%
@@ -138,10 +141,22 @@ ButtonSet_Date:
 	Setenv, setvar, 2
 	goto, start
 
+setchoice:
+	InputBox, OutputVar , DatePaste set choice, This setting is not saved, you must enter something at all start
+	if ErrorLevel
+		goto, start
+	choice:
+	IfEqual, OutputVar,,Goto, setchoice
+	clipboard = %OutputVar%
+	TrayTip, %title%, Sending to 'clipboard' %OutputVar%, 2, 1
+	;Send, %t_NowTime%
+	goto, start
+
+
 ;;--- Quit (escape , esc)
 
-;;Escape::
-	;;ExitApp
+;; Escape::
+	;; ExitApp
 
 GuiClose2:
 	ExitApp
