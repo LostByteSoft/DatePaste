@@ -14,7 +14,7 @@
 
 	SetEnv, title, Date Paste
 	SetEnv, mode, Press F6 to write actual date and time.
-	SetEnv, version, Version 2017-03-27
+	SetEnv, version, Version 2017-04-05
 	SetEnv, Author, LostByteSoft
 
 ;;--- Softwares files needed ---
@@ -27,6 +27,7 @@
 	FileInstall, ico_options.ico, ico_options.ico, 0
 	FileInstall, ico_datepaste_b.ico, ico_datepaste_b.ico, 0
 	FileInstall, ico_clipboard.ico, ico_clipboard.ico, 0
+	FileInstall, ico_time.ico, ico_time.ico, 0
 
 ;;--- Menu Tray options ---
 
@@ -37,12 +38,8 @@
 	Menu, tray, add, Exit %title%, GuiClose2
 	Menu, Tray, Icon, Exit %title%, ico_shut.ico, 1
 	Menu, tray, add
-	Menu, tray, add, About LostByteSoft, about1 			; Creates a new menu item.
-	Menu, Tray, Icon, About LostByteSoft, ico_about.ico, 1
-	Menu, tray, add, %Version%, Version 				; Show version
-	Menu, Tray, Icon, %Version%, ico_about.ico, 1
-	Menu, tray, add, Secret MsgBox, msgbox
-	Menu, Tray, Icon, Secret MsgBox, ico_lock.ico
+	Menu, tray, add, Hotkey: F6 (Default), date2
+	Menu, Tray, Icon, Hotkey: F6 (Default), ico_HotKeys.ico, 1
 	Menu, tray, add
 	Menu, tray, add, --= Options =--, about2
 	Menu, Tray, Icon, --= Options =--, ico_options.ico
@@ -51,8 +48,12 @@
 	Menu, tray, add, Set Choice value., setchoice
 	Menu, Tray, Icon, Set Choice value., ico_options.ico
 	Menu, tray, add
-	Menu, tray, add, Hotkey: F6 (Default), date2
-	Menu, Tray, Icon, Hotkey: F6 (Default), ico_HotKeys.ico, 1
+	Menu, tray, add, About LostByteSoft, about1 			; Creates a new menu item.
+	Menu, Tray, Icon, About LostByteSoft, ico_about.ico, 1
+	Menu, tray, add, %Version%, Version 				; Show version
+	Menu, Tray, Icon, %Version%, ico_about.ico, 1
+	Menu, tray, add, Secret MsgBox, msgbox
+	Menu, Tray, Icon, Secret MsgBox, ico_lock.ico
 	Menu, tray, add
 	Menu, tray, add, Send 'Date && Time' to clip, timedate2
 	Menu, Tray, Icon, Send 'Date && Time' to clip, ico_clipboard.ico, 1
@@ -60,6 +61,8 @@
 	Menu, Tray, Icon, Send 'Date' to clip, ico_clipboard.ico, 1
 	Menu, tray, add, Send 'Choice' to clip, choice
 	Menu, Tray, Icon, Send 'Choice' to clip, ico_clipboard.ico, 1
+	Menu, tray, add, Get Uptime MsgBox, uptime			; Get the message now
+	Menu, Tray, Icon, Get Uptime MsgBox, ico_time.ico, 1
 	Menu, tray, add
 	Menu, Tray, Tip, %title%
 
@@ -152,6 +155,26 @@ setchoice:
 	;Send, %t_NowTime%
 	goto, start
 
+uptime:
+	t_TimeFormat := "HH:mm:ss dddd"
+	t_StartTime :=                          		; Clear variable = A_Now
+	t_UpTime := A_TickCount // 1000				; Elapsed seconds since start
+	t_StartTime += -t_UpTime, Seconds       		; Same as EnvAdd with empty time
+	FormatTime t_NowTime, , %t_TimeFormat%  		; Empty time = A_Now
+	FormatTime t_StartTime, %t_StartTime%, %t_TimeFormat%
+	t_UpTime := % t_UpTime // 86400 " days " mod(t_UpTime // 3600, 24) ":" mod(t_UpTime // 60, 60) ":" mod(t_UpTime, 60)
+	TrayTip, Get Uptime, %t_UpTime%, 5, 1
+	MsgBox, 68, Get Uptime (Time out 10 sec(NO)), Start time: `t" %t_StartTime% "`nTime now:`t" %t_NowTime% "`n`nElapsed time:`t" %t_UpTime% "`n`n(Time out 10 sec (NO)) Click YES to reboot, 10
+	if ErrorLevel
+		goto, start
+			IfMsgBox Yes, goto, reboot
+			IfMsgBox No, goto, start
+	goto, start
+
+reboot:
+	sleep, 1000
+	Shutdown, 6
+	ExitApp
 
 ;;--- Quit (escape , esc)
 
