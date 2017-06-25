@@ -4,20 +4,18 @@
 ;;	All files must be in same folder. Where you want.
 ;;	64 bit AHK version : 1.1.24.2 64 bit Unicode
 
-;;--- Softwares options ---
+;;--- Softwares Var , files , options ---
 
+	#NoEnv
 	SetWorkingDir, %A_ScriptDir%
 	#SingleInstance Force
 	#Persistent
 
-;;--- Softwares Var ---
-
 	SetEnv, title, Date Paste
 	SetEnv, mode, Press F6 to write actual date and time.
-	SetEnv, version, Version 2017-04-05
+	SetEnv, version, Version 2017-04-21
 	SetEnv, Author, LostByteSoft
-
-;;--- Softwares files needed ---
+	Setenv, setvar, 2
 
 	FileInstall, ico_datepaste_w.ico, ico_datepaste_w.ico, 0
 	FileInstall, ico_about.ico, ico_about.ico, 0
@@ -29,24 +27,13 @@
 	FileInstall, ico_clipboard.ico, ico_clipboard.ico, 0
 	FileInstall, ico_time.ico, ico_time.ico, 0
 
-;;--- Menu Tray options ---
-
 	Menu, Tray, NoStandard
 	Menu, tray, add, --= %title% =--, about3
 	Menu, Tray, Icon, --= %title% =--, ico_datepaste_b.ico
-	Menu, tray, add
 	Menu, tray, add, Exit %title%, GuiClose2
 	Menu, Tray, Icon, Exit %title%, ico_shut.ico, 1
-	Menu, tray, add
 	Menu, tray, add, Hotkey: F6 (Default), date2
 	Menu, Tray, Icon, Hotkey: F6 (Default), ico_HotKeys.ico, 1
-	Menu, tray, add
-	Menu, tray, add, --= Options =--, about2
-	Menu, Tray, Icon, --= Options =--, ico_options.ico
-	Menu, tray, add, Set default value., msgbox2
-	Menu, Tray, Icon, Set default value., ico_options.ico
-	Menu, tray, add, Set Choice value., setchoice
-	Menu, Tray, Icon, Set Choice value., ico_options.ico
 	Menu, tray, add
 	Menu, tray, add, About LostByteSoft, about1 			; Creates a new menu item.
 	Menu, Tray, Icon, About LostByteSoft, ico_about.ico, 1
@@ -55,20 +42,21 @@
 	Menu, tray, add, Secret MsgBox, msgbox
 	Menu, Tray, Icon, Secret MsgBox, ico_lock.ico
 	Menu, tray, add
+	Menu, tray, add, --= Options =--, about2
+	Menu, Tray, Icon, --= Options =--, ico_options.ico
+	Menu, tray, add, Set default value., msgbox2
+	Menu, Tray, Icon, Set default value., ico_options.ico
+	Menu, tray, add
 	Menu, tray, add, Send 'Date && Time' to clip, timedate2
 	Menu, Tray, Icon, Send 'Date && Time' to clip, ico_clipboard.ico, 1
 	Menu, tray, add, Send 'Date' to clip, date
 	Menu, Tray, Icon, Send 'Date' to clip, ico_clipboard.ico, 1
-	Menu, tray, add, Send 'Choice' to clip, choice
-	Menu, Tray, Icon, Send 'Choice' to clip, ico_clipboard.ico, 1
+	Menu, tray, add
 	Menu, tray, add, Get Uptime MsgBox, uptime			; Get the message now
 	Menu, Tray, Icon, Get Uptime MsgBox, ico_time.ico, 1
-	Menu, tray, add
 	Menu, Tray, Tip, %title%
 
 ;;--- Software start here ---
-
-	Setenv, setvar, 2
 
 start:
 	sleep, 500
@@ -128,32 +116,21 @@ msgbox2:
 	Gui, Add, Button, x60 y130 w110 h50 , Set_Date_and_Time
 	Gui, Add, Button, x250 y130 w110 h50 , Set_Date
 	Gui, Show, x1095 y420 h200 w425, %title% %mode%
-		Return
+	Return
 
 	GuiClose:
 		Gui, destroy
 		goto, start
 
-ButtonSet_Date_and_Time:
-	Gui, destroy
-	Setenv, setvar, 1
-	goto, start
-
-ButtonSet_Date:
-	Gui, destroy
-	Setenv, setvar, 2
-	goto, start
-
-setchoice:
-	InputBox, OutputVar , DatePaste set choice, This setting is not saved, you must enter something at all start
-	if ErrorLevel
+	ButtonSet_Date_and_Time:
+		Gui, destroy
+		Setenv, setvar, 1
 		goto, start
-	choice:
-	IfEqual, OutputVar,,Goto, setchoice
-	clipboard = %OutputVar%
-	TrayTip, %title%, Sending to 'clipboard' %OutputVar%, 2, 1
-	;Send, %t_NowTime%
-	goto, start
+
+		ButtonSet_Date:
+		Gui, destroy
+		Setenv, setvar, 2
+		goto, start
 
 uptime:
 	t_TimeFormat := "HH:mm:ss dddd"
@@ -166,22 +143,19 @@ uptime:
 	TrayTip, Get Uptime, %t_UpTime%, 5, 1
 	MsgBox, 68, Get Uptime (Time out 10 sec(NO)), Start time: `t" %t_StartTime% "`nTime now:`t" %t_NowTime% "`n`nElapsed time:`t" %t_UpTime% "`n`n(Time out 10 sec (NO)) Click YES to reboot, 10
 	if ErrorLevel
-		goto, start
-			IfMsgBox Yes, goto, reboot
-			IfMsgBox No, goto, start
 	goto, start
+	IfMsgBox Yes, goto, reboot
+	IfMsgBox No, goto, start
+	goto, start
+
+;;--- Quit (escape , esc)
+
+GuiClose2:
+	ExitApp
 
 reboot:
 	sleep, 1000
 	Shutdown, 6
-	ExitApp
-
-;;--- Quit (escape , esc)
-
-;; Escape::
-	;; ExitApp
-
-GuiClose2:
 	ExitApp
 
 ;;--- Tray Bar (must be at end of file) ---
