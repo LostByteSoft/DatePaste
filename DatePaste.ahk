@@ -13,7 +13,7 @@
 
 	SetEnv, title, Date Paste
 	SetEnv, mode, Press F6 to write actual date and time.
-	SetEnv, version, Version 2017-04-21
+	SetEnv, version, Version 2017-07-19
 	SetEnv, Author, LostByteSoft
 	Setenv, setvar, 2
 
@@ -32,8 +32,8 @@
 	Menu, Tray, Icon, --= %title% =--, ico_datepaste_b.ico
 	Menu, tray, add, Exit %title%, GuiClose2
 	Menu, Tray, Icon, Exit %title%, ico_shut.ico, 1
-	Menu, tray, add, Hotkey: F6 (Default), date2
-	Menu, Tray, Icon, Hotkey: F6 (Default), ico_HotKeys.ico, 1
+	Menu, tray, add, Hotkey: F7 (Default), date2
+	Menu, Tray, Icon, Hotkey: F7 (Default), ico_HotKeys.ico, 1
 	Menu, tray, add
 	Menu, tray, add, About LostByteSoft, about1 			; Creates a new menu item.
 	Menu, Tray, Icon, About LostByteSoft, ico_about.ico, 1
@@ -54,13 +54,13 @@
 	Menu, tray, add
 	Menu, tray, add, Get Uptime MsgBox, uptime			; Get the message now
 	Menu, Tray, Icon, Get Uptime MsgBox, ico_time.ico, 1
-	Menu, Tray, Tip, %title%
+	Menu, Tray, Tip, %title% : Press F7
 
 ;;--- Software start here ---
 
 start:
 	sleep, 500
-	KeyWait, F6 , D
+	KeyWait, F7 , D
 	Ifequal, setvar, 1, Goto, timedate
 	Ifequal, setvar, 2, Goto, date
 	Goto, date
@@ -102,7 +102,7 @@ msgbox:
 	FormatTime t_NowTime1, , %t_TimeFormat1%  			; Empty time = A_Now
 	t_TimeFormat2 := "yyyy-MM-dd"
 	FormatTime t_NowTime2, , %t_TimeFormat2%  			; Empty time = A_Now
-	msgbox, 0, %title% %mode%, Press F6 to paste actual date and time.: " %t_NowTime1% ".`n`nPress F6 to paste actual date.: " %t_NowTime2% ".
+	msgbox, 0, %title% %mode%, Press F7 to paste actual date and time.: " %t_NowTime1% ".`n`nPress F7 to paste actual date.: " %t_NowTime2% ".
 	goto, start
 
 msgbox2:
@@ -141,21 +141,14 @@ uptime:
 	FormatTime t_StartTime, %t_StartTime%, %t_TimeFormat%
 	t_UpTime := % t_UpTime // 86400 " days " mod(t_UpTime // 3600, 24) ":" mod(t_UpTime // 60, 60) ":" mod(t_UpTime, 60)
 	TrayTip, Get Uptime, %t_UpTime%, 5, 1
-	MsgBox, 68, Get Uptime (Time out 10 sec(NO)), Start time: `t" %t_StartTime% "`nTime now:`t" %t_NowTime% "`n`nElapsed time:`t" %t_UpTime% "`n`n(Time out 10 sec (NO)) Click YES to reboot, 10
+	MsgBox, 64, Get Uptime, Start time: `t" %t_StartTime% "`nTime now:`t" %t_NowTime% "`n`nElapsed time:`t" %t_UpTime% "
 	if ErrorLevel
-	goto, start
-	IfMsgBox Yes, goto, reboot
-	IfMsgBox No, goto, start
+		goto, start
 	goto, start
 
 ;;--- Quit (escape , esc)
 
 GuiClose2:
-	ExitApp
-
-reboot:
-	sleep, 1000
-	Shutdown, 6
 	ExitApp
 
 ;;--- Tray Bar (must be at end of file) ---
