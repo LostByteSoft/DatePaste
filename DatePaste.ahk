@@ -12,8 +12,8 @@
 	#Persistent
 
 	SetEnv, title, Date Paste
-	SetEnv, mode, Press F6 to write actual date and time.
-	SetEnv, version, Version 2017-07-19
+	SetEnv, mode, Press F7 to write actual date and time.
+	SetEnv, version, Version 2017-08-06
 	SetEnv, Author, LostByteSoft
 	Setenv, setvar, 2
 
@@ -61,12 +61,13 @@
 start:
 	sleep, 500
 	KeyWait, F7 , D
-	Ifequal, setvar, 1, Goto, timedate
-	Ifequal, setvar, 2, Goto, date
+	Ifequal, setvar, 1, Goto, date
+	Ifequal, setvar, 2, Goto, timedate
 	Goto, date
 
 timedate:
-	t_TimeFormat := "yyyy-MM-dd-HH-mm-ss"
+	;;; t_TimeFormat := "yyyy-MM-dd-HH-mm-ss"
+	t_TimeFormat := "yyyy-MM-dd-HHmm"
 	FormatTime t_NowTime, , %t_TimeFormat%  			; Empty time = A_Now
 	clipboard = %t_NowTime%
 	;TrayTip, %title%, Sending to 'clipboard' %t_NowTime%, 2, 1
@@ -82,7 +83,8 @@ date:
 	goto, start
 
 timedate2:
-	t_TimeFormat := "yyyy-MM-dd-HH-mm-ss"
+	;;; t_TimeFormat := "yyyy-MM-dd-HH-mm-ss"
+	t_TimeFormat := "yyyy-MM-dd-HHmm"
 	FormatTime t_NowTime, , %t_TimeFormat%  			; Empty time = A_Now
 	clipboard = %t_NowTime%
 	TrayTip, %title%, Sending to 'clipboard' %t_NowTime%, 2, 1
@@ -98,7 +100,8 @@ date2:
 	goto, start
 
 msgbox:
-	t_TimeFormat1 := "yyyy-MM-dd-HH-mm-ss"
+	;;; t_TimeFormat1 := "yyyy-MM-dd-HH-mm-ss"
+	t_TimeFormat1 := "yyyy-MM-dd-HHmm"
 	FormatTime t_NowTime1, , %t_TimeFormat1%  			; Empty time = A_Now
 	t_TimeFormat2 := "yyyy-MM-dd"
 	FormatTime t_NowTime2, , %t_TimeFormat2%  			; Empty time = A_Now
@@ -106,7 +109,8 @@ msgbox:
 	goto, start
 
 msgbox2:
-	t_TimeFormat1 := "yyyy-MM-dd-HH-mm-ss"
+	;;; t_TimeFormat1 := "yyyy-MM-dd-HH-mm-ss"
+	t_TimeFormat1 := "yyyy-MM-dd-HHmm"
 	FormatTime t_NowTime1, , %t_TimeFormat1%			; Empty time = A_Now
 	t_TimeFormat2 := "yyyy-MM-dd"
 	FormatTime t_NowTime2, , %t_TimeFormat2%			; Empty time = A_Now
