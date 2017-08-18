@@ -7,13 +7,13 @@
 ;;--- Softwares Var , files , options ---
 
 	#NoEnv
-	SetWorkingDir, %A_ScriptDir%
 	#SingleInstance Force
 	#Persistent
+	SetWorkingDir, %A_ScriptDir%
 
 	SetEnv, title, Date Paste
 	SetEnv, mode, Press F7 to write actual date and time.
-	SetEnv, version, Version 2017-08-06-1747
+	SetEnv, version, Version 2017-08-06-2142
 	SetEnv, Author, LostByteSoft
 	Setenv, setvar, 2
 
@@ -59,6 +59,7 @@
 
 ;;--- Software start here ---
 
+loop:
 start:
 	sleep, 500
 	KeyWait, F7 , D
@@ -159,10 +160,10 @@ doReload:
 	Goto, start
 
 GuiLogo:
-	Gui, Add, Picture, x25 y25 w200 h200 , ico_datepaste_w.ico
-	Gui, Show, w250 h250, %title% Logo
+	Gui, Add, Picture, x25 y25 w400 h400 , ico_datepaste_w.ico
+	Gui, Show, w450 h450, %title% Logo
 	Gui, Color, 000000
-	goto, start
+	goto, loop
 
 ;;--- End of script ---
 ;
