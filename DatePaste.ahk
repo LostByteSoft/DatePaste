@@ -13,9 +13,11 @@
 
 	SetEnv, title, Date Paste
 	SetEnv, mode, Press F7 to write actual date and time.
-	SetEnv, version, Version 2017-08-06-2142
+	SetEnv, version, Version 2017-10-15-0942
 	SetEnv, Author, LostByteSoft
 	Setenv, setvar, 2
+	Setenv, logoicon, ico_datepaste_b.ico
+	SetEnv, pause, 0
 
 	FileInstall, ico_datepaste_w.ico, ico_datepaste_w.ico, 0
 	FileInstall, ico_about.ico, ico_about.ico, 0
@@ -26,38 +28,49 @@
 	FileInstall, ico_datepaste_b.ico, ico_datepaste_b.ico, 0
 	FileInstall, ico_clipboard.ico, ico_clipboard.ico, 0
 	FileInstall, ico_time.ico, ico_time.ico, 0
+	FileInstall, ico_pause.ico, ico_pause.ico, 0
+	FileInstall, ico_reboot.ico, ico_reboot.ico, 0
 
 	Menu, Tray, NoStandard
-	Menu, tray, add, --= %title% =--, about3
-	Menu, Tray, Icon, --= %title% =--, ico_datepaste_b.ico
-	Menu, tray, add
-	Menu, tray, add, Exit %title%, GuiClose2
-	Menu, Tray, Icon, Exit %title%, ico_shut.ico, 1
+	Menu, tray, add, ---=== %title% ===---, about
+	Menu, Tray, Icon, ---=== %title% ===---, %logoicon%
 	Menu, tray, add, Show logo, GuiLogo
-	Menu, tray, add, Secret MsgBox, msgbox
+	Menu, tray, add, Secret MsgBox, secret					; Secret MsgBox, just show all options and variables of the program
 	Menu, Tray, Icon, Secret MsgBox, ico_lock.ico
-	Menu, tray, add
-	Menu, tray, add, About LostByteSoft, about1 			; Creates a new menu item.
-	Menu, Tray, Icon, About LostByteSoft, ico_about.ico, 1
-	Menu, tray, add, %Version%, Version 				; Show version
-	Menu, Tray, Icon, %Version%, ico_about.ico, 1
-	Menu, tray, add
-	Menu, tray, add, --= Options =--, about2
+	Menu, tray, add, About && ReadMe, author
+	Menu, Tray, Icon, About && ReadMe, ico_about.ico
+	Menu, tray, add, Author %author%, about
+	menu, tray, disable, Author %author%
+	Menu, tray, add, %version%, about
+	menu, tray, disable, %version%
+	Menu, tray, add,
+	Menu, tray, add, --= Control =--, about
+	Menu, Tray, Icon, --= Control =--, ico_options.ico
+	Menu, tray, add, Exit %title%, Close				; Close exit program
+	Menu, Tray, Icon, Exit %title%, ico_shut.ico
+	Menu, tray, add, Refresh (ini mod), doReload 		; Reload the script.
+	Menu, Tray, Icon, Refresh (ini mod), ico_reboot.ico
+	Menu, tray, add, Debug (Toggle), debug
+	Menu, tray, add, Pause (Toggle), pause
+	Menu, Tray, Icon, Pause (Toggle), ico_pause.ico
+	Menu, tray, add,
+	Menu, tray, add, --= Options =--, about
 	Menu, Tray, Icon, --= Options =--, ico_options.ico
+	Menu, tray, add,
 	Menu, tray, add, Set default value., msgbox2
 	Menu, Tray, Icon, Set default value., ico_options.ico
-	Menu, tray, add
 	Menu, tray, add, Send 'Date && Time' to clip, timedate2
 	Menu, Tray, Icon, Send 'Date && Time' to clip, ico_clipboard.ico, 1
 	Menu, tray, add, Send 'Date' to clip, date
 	Menu, Tray, Icon, Send 'Date' to clip, ico_clipboard.ico, 1
-	Menu, tray, add
-	Menu, tray, add,
 	Menu, tray, add, Hotkey: F7 (Default), date2
 	Menu, Tray, Icon, Hotkey: F7 (Default), ico_HotKeys.ico, 1
+	Menu, tray, add,
 	Menu, Tray, Tip, %title% : Press F7
 
 ;;--- Software start here ---
+
+	Menu, Tray, Icon, ico_datepaste_w.ico
 
 loop:
 start:
@@ -134,30 +147,68 @@ msgbox2:
 		Setenv, setvar, 1
 		goto, start
 
-;;--- Quit (escape , esc)
+Debug:
+	IfEqual, debug, 0, goto, enable
+	IfEqual, debug, 1, goto, disable
+	enable:
+	SetEnv, debug, 1
+	Goto, loop
+	disable:
+	SetEnv, debug, 0
+	Goto, loop
 
-GuiClose2:
-	ExitApp
+pause:
+	Ifequal, pause, 0, goto, paused
+	Ifequal, pause, 1, goto, unpaused
+
+	paused:
+	Menu, Tray, Icon, ico_pause.ico
+	SetEnv, pause, 1
+	goto, loop
+
+	unpaused:	
+	Menu, Tray, Icon, ico_time_w.ico
+	SetEnv, pause, 0
+	Goto, loop
+
+;;--- Quit (escape , esc)
 
 GuiClose:
 	Gui, destroy
 	goto, start
 
+GuiClose2:
+Close:
+	ExitApp
+
+; Escape::		; Debug purpose
+	ExitApp
+
+doReload:
+	Reload
+	sleep, 100
+	goto, Close
+
 ;;--- Tray Bar (must be at end of file) ---
 
+about:
 about1:
 about2:
 about3:
 	TrayTip, %title%, %mode% by %Author%, 2, 2
 	Return
 
+author:
+	MsgBox, 64, %title%, %title% %mode% %version% %author%. This software is usefull for paste date anywhere with a shortkey.`n`n`tGo to https://github.com/LostByteSoft
+	Return
+
+secret:
+	msgbox, 49, %title%, title=%title% mode=%mode% version=%version% author=%author% logoicon=%logoicon% A_ScriptDir=%A_ScriptDir%`n`nsetvar=%setvar%
+	Return
+
 Version:
 	TrayTip, %title%, %version%, 2, 2
 	Return
-
-doReload:
-	Reload
-	Goto, start
 
 GuiLogo:
 	Gui, Add, Picture, x25 y25 w400 h400 , ico_datepaste_w.ico
