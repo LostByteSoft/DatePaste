@@ -13,64 +13,66 @@
 
 	SetEnv, title, Date Paste
 	SetEnv, mode, Press F7 to write actual date and time.
-	SetEnv, version, Version 2017-10-15-0942
+	SetEnv, version, Version 2017-11-23-1439
 	SetEnv, Author, LostByteSoft
 	Setenv, setvar, 2
+	SetEnv, icofolder, C:\Program Files\Common Files
 	Setenv, logoicon, ico_datepaste_b.ico
 	SetEnv, pause, 0
 
-	FileInstall, ico_datepaste_w.ico, ico_datepaste_w.ico, 0
-	FileInstall, ico_about.ico, ico_about.ico, 0
-	FileInstall, ico_lock.ico, ico_lock.ico, 0
-	FileInstall, ico_shut.ico, ico_shut.ico, 0
-	FileInstall, ico_HotKeys.ico, ico_HotKeys.ico, 0
-	FileInstall, ico_options.ico, ico_options.ico, 0
-	FileInstall, ico_datepaste_b.ico, ico_datepaste_b.ico, 0
-	FileInstall, ico_clipboard.ico, ico_clipboard.ico, 0
-	FileInstall, ico_time.ico, ico_time.ico, 0
-	FileInstall, ico_pause.ico, ico_pause.ico, 0
-	FileInstall, ico_reboot.ico, ico_reboot.ico, 0
+	FileInstall, ico_datepaste_w.ico, %icofolder%\ico_datepaste_w.ico, 0
+	FileInstall, ico_about.ico, %icofolder%\ico_about.ico, 0
+	FileInstall, ico_lock.ico, %icofolder%\ico_lock.ico, 0
+	FileInstall, ico_shut.ico, %icofolder%\ico_shut.ico, 0
+	FileInstall, ico_HotKeys.ico, %icofolder%\ico_HotKeys.ico, 0
+	FileInstall, ico_options.ico, %icofolder%\ico_options.ico, 0
+	FileInstall, ico_datepaste_b.ico, %icofolder%\ico_datepaste_b.ico, 0
+	FileInstall, ico_clipboard.ico, %icofolder%\ico_clipboard.ico, 0
+	FileInstall, ico_time.ico, %icofolder%\ico_time.ico, 0
+	FileInstall, ico_pause.ico, %icofolder%\ico_pause.ico, 0
+	FileInstall, ico_reboot.ico, %icofolder%\ico_reboot.ico, 0
+	FileInstall, ico_debug.ico, %icofolder%\ico_debug.ico, 0
 
 	Menu, Tray, NoStandard
 	Menu, tray, add, ---=== %title% ===---, about
-	Menu, Tray, Icon, ---=== %title% ===---, %logoicon%
+	Menu, Tray, Icon, ---=== %title% ===---, %icofolder%\%logoicon%
 	Menu, tray, add, Show logo, GuiLogo
 	Menu, tray, add, Secret MsgBox, secret					; Secret MsgBox, just show all options and variables of the program
-	Menu, Tray, Icon, Secret MsgBox, ico_lock.ico
+	Menu, Tray, Icon, Secret MsgBox, %icofolder%\ico_lock.ico
 	Menu, tray, add, About && ReadMe, author
-	Menu, Tray, Icon, About && ReadMe, ico_about.ico
+	Menu, Tray, Icon, About && ReadMe, %icofolder%\ico_about.ico
 	Menu, tray, add, Author %author%, about
 	menu, tray, disable, Author %author%
 	Menu, tray, add, %version%, about
 	menu, tray, disable, %version%
 	Menu, tray, add,
 	Menu, tray, add, --= Control =--, about
-	Menu, Tray, Icon, --= Control =--, ico_options.ico
+	Menu, Tray, Icon, --= Control =--, %icofolder%\ico_options.ico
 	Menu, tray, add, Exit %title%, Close				; Close exit program
-	Menu, Tray, Icon, Exit %title%, ico_shut.ico
+	Menu, Tray, Icon, Exit %title%, %icofolder%\ico_shut.ico
 	Menu, tray, add, Refresh (ini mod), doReload 		; Reload the script.
-	Menu, Tray, Icon, Refresh (ini mod), ico_reboot.ico
-	Menu, tray, add, Debug (Toggle), debug
+	Menu, Tray, Icon, Refresh (ini mod), %icofolder%\ico_reboot.ico
+	Menu, tray, add, Set Debug (Toggle), debug
+	Menu, Tray, Icon, Set Debug (Toggle), %icofolder%\ico_debug.ico
 	Menu, tray, add, Pause (Toggle), pause
-	Menu, Tray, Icon, Pause (Toggle), ico_pause.ico
+	Menu, Tray, Icon, Pause (Toggle), %icofolder%\ico_pause.ico
 	Menu, tray, add,
 	Menu, tray, add, --= Options =--, about
-	Menu, Tray, Icon, --= Options =--, ico_options.ico
-	Menu, tray, add,
+	Menu, Tray, Icon, --= Options =--, %icofolder%\ico_options.ico
 	Menu, tray, add, Set default value., msgbox2
-	Menu, Tray, Icon, Set default value., ico_options.ico
+	Menu, Tray, Icon, Set default value., %icofolder%\ico_options.ico
 	Menu, tray, add, Send 'Date && Time' to clip, timedate2
-	Menu, Tray, Icon, Send 'Date && Time' to clip, ico_clipboard.ico, 1
+	Menu, Tray, Icon, Send 'Date && Time' to clip, %icofolder%\ico_clipboard.ico, 1
 	Menu, tray, add, Send 'Date' to clip, date
-	Menu, Tray, Icon, Send 'Date' to clip, ico_clipboard.ico, 1
+	Menu, Tray, Icon, Send 'Date' to clip, %icofolder%\ico_clipboard.ico, 1
 	Menu, tray, add, Hotkey: F7 (Default), date2
-	Menu, Tray, Icon, Hotkey: F7 (Default), ico_HotKeys.ico, 1
+	Menu, Tray, Icon, Hotkey: F7 (Default), %icofolder%\ico_HotKeys.ico, 1
 	Menu, tray, add,
 	Menu, Tray, Tip, %title% : Press F7
 
 ;;--- Software start here ---
 
-	Menu, Tray, Icon, ico_datepaste_w.ico
+	Menu, Tray, Icon, %icofolder%\ico_datepaste_w.ico
 
 loop:
 start:
@@ -162,12 +164,12 @@ pause:
 	Ifequal, pause, 1, goto, unpaused
 
 	paused:
-	Menu, Tray, Icon, ico_pause.ico
+	Menu, Tray, Icon, %icofolder%\ico_pause.ico
 	SetEnv, pause, 1
 	goto, loop
 
 	unpaused:	
-	Menu, Tray, Icon, ico_time_w.ico
+	Menu, Tray, Icon, %icofolder%\ico_time_w.ico
 	SetEnv, pause, 0
 	Goto, loop
 
@@ -211,10 +213,15 @@ Version:
 	Return
 
 GuiLogo:
-	Gui, Add, Picture, x25 y25 w400 h400 , ico_datepaste_w.ico
-	Gui, Show, w450 h450, %title% Logo
-	Gui, Color, 000000
-	goto, loop
+	Gui, 4:Add, Picture, x25 y25 w400 h400, %icofolder%\%logoicon%
+	Gui, 4:Show, w450 h450, %title% Logo
+	;;Gui, 4:Color, 000000
+	Sleep, 500
+	Return
+
+	4GuiClose:
+	Gui 4:Cancel
+	return
 
 ;;--- End of script ---
 ;
