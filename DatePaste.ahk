@@ -13,7 +13,7 @@
 
 	SetEnv, title, Date Paste
 	SetEnv, mode, Press F7 to write actual date and time.
-	SetEnv, version, Version 2017-11-23-1439
+	SetEnv, version, Version 2018-03-13-2100
 	SetEnv, Author, LostByteSoft
 	Setenv, setvar, 2
 	SetEnv, icofolder, C:\Program Files\Common Files
@@ -45,6 +45,11 @@
 	menu, tray, disable, Author %author%
 	Menu, tray, add, %version%, about
 	menu, tray, disable, %version%
+	menu, tray, add, Show Gui, msgbox2					; Default gui
+	Menu, Tray, Icon, Show Gui, %icofolder%\%logoicon%
+	Menu, Tray, Default, Show Gui
+	Menu, Tray, Click, 1
+	Menu, tray, add, Open A_WorkingDir, A_WorkingDir
 	Menu, tray, add,
 	Menu, tray, add, --= Control =--, about
 	Menu, Tray, Icon, --= Control =--, %icofolder%\ico_options.ico
@@ -136,6 +141,7 @@ msgbox2:
 	Gui, Add, Text, x5 y5 w400 h98 , Press 'Set_Date_and_Time' to paste actual date and time.: " %t_NowTime1% ".`n`nPress 'Set_Date' to paste actual time.: " %t_NowTime2% ".`n`nAt start default is DateTime.
 	Gui, Add, Button, x60 y130 w110 h50 , Set_Date_and_Time
 	Gui, Add, Button, x250 y130 w110 h50 , Set_Date
+	Gui, -MinimizeBox
 	Gui, Show, x1095 y420 h200 w425, %title% %mode%
 	Return
 
@@ -205,7 +211,7 @@ author:
 	Return
 
 secret:
-	msgbox, 49, %title%, title=%title% mode=%mode% version=%version% author=%author% logoicon=%logoicon% A_ScriptDir=%A_ScriptDir%`n`nsetvar=%setvar%
+	MsgBox, 64, %title%, SECRET MsgBox All variables is shown here.`n`ntitle=%title% mode=%mode% version=%version% author=%author% LogoIcon=%logoicon% Debug=%debug%`n`nA_WorkingDir=%A_WorkingDir%`nIcoFolder=%icofolder%`n`nsetvar=%setvar%
 	Return
 
 Version:
@@ -215,13 +221,19 @@ Version:
 GuiLogo:
 	Gui, 4:Add, Picture, x25 y25 w400 h400, %icofolder%\%logoicon%
 	Gui, 4:Show, w450 h450, %title% Logo
-	;;Gui, 4:Color, 000000
+	Gui, 4:Color, 000000
+	Gui, 4:-MinimizeBox
 	Sleep, 500
 	Return
 
 	4GuiClose:
 	Gui 4:Cancel
 	return
+
+A_WorkingDir:
+	IfEqual, debug, 1, msgbox, run, explorer.exe "%A_WorkingDir%"
+	run, explorer.exe "%A_WorkingDir%"
+	Return
 
 ;;--- End of script ---
 ;
