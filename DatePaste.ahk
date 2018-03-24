@@ -11,67 +11,77 @@
 	#Persistent
 	SetWorkingDir, %A_ScriptDir%
 
-	SetEnv, title, Date Paste
+	SetEnv, title, DatePaste
 	SetEnv, mode, Press F7 to write actual date and time.
-	SetEnv, version, Version 2018-03-13-2100
+	SetEnv, version, Version 2018-03-24-0933
 	SetEnv, Author, LostByteSoft
-	Setenv, setvar, 2
 	SetEnv, icofolder, C:\Program Files\Common Files
 	Setenv, logoicon, ico_datepaste_b.ico
 	SetEnv, pause, 0
+	Setenv, setvar, 2
 
+	;; Specific Icons (or files)
 	FileInstall, ico_datepaste_w.ico, %icofolder%\ico_datepaste_w.ico, 0
-	FileInstall, ico_about.ico, %icofolder%\ico_about.ico, 0
-	FileInstall, ico_lock.ico, %icofolder%\ico_lock.ico, 0
-	FileInstall, ico_shut.ico, %icofolder%\ico_shut.ico, 0
-	FileInstall, ico_HotKeys.ico, %icofolder%\ico_HotKeys.ico, 0
-	FileInstall, ico_options.ico, %icofolder%\ico_options.ico, 0
 	FileInstall, ico_datepaste_b.ico, %icofolder%\ico_datepaste_b.ico, 0
 	FileInstall, ico_clipboard.ico, %icofolder%\ico_clipboard.ico, 0
-	FileInstall, ico_time.ico, %icofolder%\ico_time.ico, 0
-	FileInstall, ico_pause.ico, %icofolder%\ico_pause.ico, 0
+
+	;; Common ico
+	FileInstall, ico_about.ico, %icofolder%\ico_about.ico, 0
+	FileInstall, ico_lock.ico, %icofolder%\ico_lock.ico, 0
+	FileInstall, ico_options.ico, %icofolder%\ico_options.ico, 0
 	FileInstall, ico_reboot.ico, %icofolder%\ico_reboot.ico, 0
+	FileInstall, ico_shut.ico, %icofolder%\ico_shut.ico, 0
 	FileInstall, ico_debug.ico, %icofolder%\ico_debug.ico, 0
+	FileInstall, ico_HotKeys.ico, %icofolder%\ico_HotKeys.ico, 0
+	FileInstall, ico_pause.ico, %icofolder%\ico_pause.ico, 0
+	FileInstall, ico_loupe.ico, %icofolder%\ico_loupe.ico, 0
+	FileInstall, ico_folder.ico, %icofolder%\ico_folder.ico, 0
+
+;;--- Menu Tray options ---
 
 	Menu, Tray, NoStandard
 	Menu, tray, add, ---=== %title% ===---, about
 	Menu, Tray, Icon, ---=== %title% ===---, %icofolder%\%logoicon%
 	Menu, tray, add, Show logo, GuiLogo
-	Menu, tray, add, Secret MsgBox, secret					; Secret MsgBox, just show all options and variables of the program
+	Menu, tray, add, Secret MsgBox, secret					; Secret MsgBox, just show all options and variables of the program.
 	Menu, Tray, Icon, Secret MsgBox, %icofolder%\ico_lock.ico
-	Menu, tray, add, About && ReadMe, author
+	Menu, tray, add, About && ReadMe, author				; infos about author
 	Menu, Tray, Icon, About && ReadMe, %icofolder%\ico_about.ico
-	Menu, tray, add, Author %author%, about
+	Menu, tray, add, Author %author%, about					; author msg box
 	menu, tray, disable, Author %author%
-	Menu, tray, add, %version%, about
+	Menu, tray, add, %version%, about					; version of the software
 	menu, tray, disable, %version%
-	menu, tray, add, Show Gui, msgbox2					; Default gui
-	Menu, Tray, Icon, Show Gui, %icofolder%\%logoicon%
-	Menu, Tray, Default, Show Gui
-	Menu, Tray, Click, 1
-	Menu, tray, add, Open A_WorkingDir, A_WorkingDir
+	Menu, tray, add, Open project web page, webpage				; open web page project
+	Menu, Tray, Icon, Open project web page, %icofolder%\ico_HotKeys.ico
 	Menu, tray, add,
-	Menu, tray, add, --= Control =--, about
-	Menu, Tray, Icon, --= Control =--, %icofolder%\ico_options.ico
-	Menu, tray, add, Exit %title%, Close				; Close exit program
-	Menu, Tray, Icon, Exit %title%, %icofolder%\ico_shut.ico
-	Menu, tray, add, Refresh (ini mod), doReload 		; Reload the script.
-	Menu, Tray, Icon, Refresh (ini mod), %icofolder%\ico_reboot.ico
-	Menu, tray, add, Set Debug (Toggle), debug
+	Menu, tray, add, --== Control ==--, about
+	Menu, Tray, Icon, --== Control ==--, %icofolder%\ico_options.ico
+	menu, tray, add, Show Gui (Same as click), start			; Default gui open
+	Menu, Tray, Icon, Show Gui (Same as click), %icofolder%\ico_loupe.ico
+	Menu, Tray, Default, Show Gui (Same as click)
+	Menu, Tray, Click, 1
+	Menu, tray, add, Set Debug (Toggle), debug				; debug msg
 	Menu, Tray, Icon, Set Debug (Toggle), %icofolder%\ico_debug.ico
-	Menu, tray, add, Pause (Toggle), pause
+	Menu, tray, add, Open A_WorkingDir, A_WorkingDir			; open where the exe is
+	Menu, Tray, Icon, Open A_WorkingDir, %icofolder%\ico_folder.ico
+	Menu, tray, add,
+	Menu, tray, add, Exit %title%, ExitApp					; Close exit program
+	Menu, Tray, Icon, Exit %title%, %icofolder%\ico_shut.ico
+	Menu, tray, add, Refresh (Ini mod), doReload 				; Reload the script.
+	Menu, Tray, Icon, Refresh (Ini mod), %icofolder%\ico_reboot.ico
+	Menu, tray, add, Pause (Toggle), pause					; pause the script
 	Menu, Tray, Icon, Pause (Toggle), %icofolder%\ico_pause.ico
 	Menu, tray, add,
-	Menu, tray, add, --= Options =--, about
-	Menu, Tray, Icon, --= Options =--, %icofolder%\ico_options.ico
+	Menu, tray, add, --== Options ==--, about
+	Menu, Tray, Icon, --== Options ==--, %icofolder%\ico_options.ico
+	Menu, tray, add, Hotkey: F7, date2
+	Menu, Tray, Icon, Hotkey: F7, %icofolder%\ico_HotKeys.ico
 	Menu, tray, add, Set default value., msgbox2
 	Menu, Tray, Icon, Set default value., %icofolder%\ico_options.ico
 	Menu, tray, add, Send 'Date && Time' to clip, timedate2
-	Menu, Tray, Icon, Send 'Date && Time' to clip, %icofolder%\ico_clipboard.ico, 1
+	Menu, Tray, Icon, Send 'Date && Time' to clip, %icofolder%\ico_clipboard.ico
 	Menu, tray, add, Send 'Date' to clip, date
-	Menu, Tray, Icon, Send 'Date' to clip, %icofolder%\ico_clipboard.ico, 1
-	Menu, tray, add, Hotkey: F7 (Default), date2
-	Menu, Tray, Icon, Hotkey: F7 (Default), %icofolder%\ico_HotKeys.ico, 1
+	Menu, Tray, Icon, Send 'Date' to clip, %icofolder%\ico_clipboard.ico
 	Menu, tray, add,
 	Menu, Tray, Tip, %title% : Press F7
 
@@ -79,7 +89,6 @@
 
 	Menu, Tray, Icon, %icofolder%\ico_datepaste_w.ico
 
-loop:
 start:
 	sleep, 500
 	KeyWait, F7 , D
@@ -155,15 +164,36 @@ msgbox2:
 		Setenv, setvar, 1
 		goto, start
 
+;;--- Quit ---
+
+;; Escape::		; Debug purpose
+	ExitApp
+
+GuiClose:
+	Gui, destroy
+	goto, start
+
+ExitApp:
+	ExitApp
+
+doReload:
+	Reload
+	sleep, 100
+	goto, ExitApp
+
+;;--- Debug Pause ---
+
 Debug:
 	IfEqual, debug, 0, goto, enable
 	IfEqual, debug, 1, goto, disable
+
 	enable:
 	SetEnv, debug, 1
-	Goto, loop
+	Goto, start
+
 	disable:
 	SetEnv, debug, 0
-	Goto, loop
+	Goto, start
 
 pause:
 	Ifequal, pause, 0, goto, paused
@@ -172,37 +202,16 @@ pause:
 	paused:
 	Menu, Tray, Icon, %icofolder%\ico_pause.ico
 	SetEnv, pause, 1
-	goto, loop
+	goto, start
 
 	unpaused:	
 	Menu, Tray, Icon, %icofolder%\ico_time_w.ico
 	SetEnv, pause, 0
-	Goto, loop
-
-;;--- Quit (escape , esc)
-
-GuiClose:
-	Gui, destroy
-	goto, start
-
-GuiClose2:
-Close:
-	ExitApp
-
-; Escape::		; Debug purpose
-	ExitApp
-
-doReload:
-	Reload
-	sleep, 100
-	goto, Close
+	Goto, start
 
 ;;--- Tray Bar (must be at end of file) ---
 
 about:
-about1:
-about2:
-about3:
 	TrayTip, %title%, %mode% by %Author%, 2, 2
 	Return
 
@@ -233,6 +242,10 @@ GuiLogo:
 A_WorkingDir:
 	IfEqual, debug, 1, msgbox, run, explorer.exe "%A_WorkingDir%"
 	run, explorer.exe "%A_WorkingDir%"
+	Return
+
+webpage:
+	run, https://github.com/LostByteSoft/%title%
 	Return
 
 ;;--- End of script ---
